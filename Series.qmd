@@ -1,0 +1,211 @@
+---
+title: "Series"
+author: "Miguel Ruiz"
+format: pdf
+editor: visual
+---
+
+\#
+
+## Serie de Tiempo
+
+```{r, message=FALSE, warning=FALSE}
+library(readxl)
+library(ggplot2)
+library(ggfortify)
+library(forecast)
+library(scales)
+
+
+data <- read_excel("C:/Users/Mike/Downloads/Indicadores20250320193222.xls" ,skip=5)
+data
+data <- head(data, -5)  
+colnames(data)[1] <- "fecha"
+colnames(data)[2] <- "valor"
+
+ts_data <- ts(data$valor, start=c(2018,9), frequency=12)
+
+
+autoplot(ts_data) +
+  ggtitle("Serie de Tiempo de Indicador") +
+  xlab("Fecha") +
+  ylab("Ingreso de visitantes vía aerea") +
+  scale_y_continuous(labels=scales::comma)
+```
+
+# Descomposición
+
+```{r,message=FALSE, warning=FALSE}
+
+descom<-decompose(ts_data,type=c("multiplicative"))
+autoplot(descom)+
+ggtitle("Descomposición de la serie de tiempo")+
+theme_light()
+```
+
+# Observación Anual
+
+```{r,message=FALSE,warning=FALSE}
+
+ggseasonplot(ts_data, year.labels=TRUE, year.labels.left=TRUE) +
+  ylab("Cantidad") +
+  ggtitle("Observación Anual de visitantes")
+
+```
+
+# Pronóstico Automático
+
+```{r, message=FALSE,warning=FALSE}
+h <- 3
+
+modelo_auto <- auto.arima(ts_data)
+pronostico_auto <- forecast(modelo_auto, h=h)
+
+autoplot(pronostico_auto) +
+  scale_y_continuous(labels = scales::comma)
+```
+
+# Pronóstico Manual
+
+```{r, message=FALSE, warning=FALSE}
+modelo_manual <- Arima(ts_data, order=c(1,1,1))
+pronostico_manual <- forecast(modelo_manual, h=h)
+
+autoplot(ts_data, series="Datos Reales") +
+  autolayer(pronostico_manual$mean, series="Pronóstico") +
+  autolayer(pronostico_manual, serie="Intervalo de Pronóstico", PI=TRUE, alpha=0.95)
+```
+
+#empleo y ocupación
+
+```{r}
+data <- read_excel("C:/Users/Mike/Downloads/Indicadores20250320182724.xls",skip=4 )
+
+data <- head(data, -5) 
+data
+colnames(data)[1] <- "fecha"
+colnames(data)[2] <- "valor"
+
+ts_data <- ts(data$valor, start=c(2018,9), frequency=12)
+
+
+autoplot(ts_data) +
+  ggtitle("Serie de Tiempo de Indicador") +
+  xlab("Fecha") +
+  ylab("Población no activa") +
+  scale_y_continuous(labels=scales::comma)
+
+```
+
+# Descomposición
+
+```{r,message=FALSE, warning=FALSE}
+
+
+descom<-decompose(ts_data,type=c("multiplicative"))
+autoplot(descom)+
+ggtitle("Descomposición de la serie de tiempo")+
+theme_light()
+
+
+```
+
+# Observación Anual
+
+```{r,message=FALSE,warning=FALSE}
+
+ggseasonplot(ts_data, year.labels=TRUE, year.labels.left=TRUE) +
+  ylab("Cantidad") +
+  ggtitle("Observación Anual de poblacion no activa")
+```
+
+# Pronóstico Automático
+
+```{r, message=FALSE,warning=FALSE}
+h <- 3
+
+modelo_auto <- auto.arima(ts_data)
+pronostico_auto <- forecast(modelo_auto, h=h)
+
+autoplot(pronostico_auto) +
+  scale_y_continuous(labels = scales::comma)
+```
+
+# Pronóstico Manual
+
+```{r, message=FALSE, warning=FALSE}
+modelo_manual <- Arima(ts_data, order=c(1,1,1))
+pronostico_manual <- forecast(modelo_manual, h=h)
+
+autoplot(ts_data, series="Datos Reales") +
+  autolayer(pronostico_manual$mean, series="Pronóstico") +
+  autolayer(pronostico_manual, serie="Intervalo de Pronóstico", PI=TRUE, alpha=0.95)
+```
+
+#Vía Aérea
+
+# Series de Tiempo
+
+```{r}
+data <- read_excel("C:/Users/Mike/Downloads/Indicadores20250320193040.xls",skip=4 )
+
+data <- head(data, -5) 
+data
+colnames(data)[1] <- "fecha"
+colnames(data)[2] <- "valor"
+
+ts_data <- ts(data$valor, start=c(2018,9), frequency=12)
+
+
+autoplot(ts_data) +
+  ggtitle("Serie de Tiempo de Indicador") +
+  xlab("Fecha") +
+  ylab("Ingresos vía aérea") +
+  scale_y_continuous(labels=scales::comma)
+
+```
+
+# Descomposición
+
+```{r,message=FALSE,warning=FALSE}
+
+descom<-decompose(ts_data,type=c("multiplicative"))
+autoplot(descom)+
+ggtitle("Descomposición de la serie de tiempo")+
+theme_light()
+
+
+```
+
+# Observación anual
+
+```{r,message=FALSE,warning=FALSE}
+
+ggseasonplot(ts_data, year.labels=TRUE, year.labels.left=TRUE) +
+  ylab("Cantidad") +
+  ggtitle("Observación Anual de ingresos vía aérea")
+
+```
+
+# Pronóstico Automático
+
+```{r, message=FALSE,warning=FALSE}
+h <- 3
+
+modelo_auto <- auto.arima(ts_data)
+pronostico_auto <- forecast(modelo_auto, h=h)
+
+autoplot(pronostico_auto) +
+  scale_y_continuous(labels = scales::comma)
+```
+
+# Pronóstico Manual
+
+```{r, message=FALSE, warning=FALSE}
+modelo_manual <- Arima(ts_data, order=c(1,1,1))
+pronostico_manual <- forecast(modelo_manual, h=h)
+
+autoplot(ts_data, series="Datos Reales") +
+  autolayer(pronostico_manual$mean, series="Pronóstico") +
+  autolayer(pronostico_manual, serie="Intervalo de Pronóstico", PI=TRUE, alpha=0.95)
+```
